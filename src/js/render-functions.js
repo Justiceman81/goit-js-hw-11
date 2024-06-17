@@ -1,54 +1,41 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import { searchImg } from './pixabay-api.js';
 
-// const refs = {
-//   formEl: document.querySelector('.js-binance-form'),
-//   infoEl: document.querySelector('.js-binance-info'),
-// };
-// let userSymbol;
+const listEl = document.querySelector('.img-list');
+let lightbox;
 
-// //!===============================================================
-// refs.formEl.addEventListener('submit', e => {
-//   e.preventDefault();
-//   const pair = e.target.elements.query.value;
-//   getPrice(pair)
-//     .then(data => {
-//       const markup = priceTemplate(data);
-//       refs.infoEl.innerHTML = markup;
-//     })
-//     .catch(err => {});
-// });
+export function createElements() {
+  searchImg().then(data => {
+    const markup = imgsTemplate(data);
+    listEl.insertAdjacentHTML('afterbegin', markup);
+    lightbox.refresh();
+  });
+}
 
-// //!===============================================================
-
-// function getPrice(userSymbol) {
-//   const BASE_URL = 'https://binance43.p.rapidapi.com';
-//   const END_POINT = '/ticker/price';
-//   const params = new URLSearchParams({
-//     symbol: userSymbol,
-//   });
-//   const url = `${BASE_URL}${END_POINT}?${params}`;
-
-//   const headers = {
-//     'x-rapidapi-key': '9b3ff61931msh1b42d77d34e33dap1c29cajsn3d3169e0e2f4',
-//     'x-rapidapi-host': 'binance43.p.rapidapi.com',
-//   };
-
-//   return fetch(url, { headers }).then(res => res.json());
-// }
-
-// //!===============================================================
-
-// function priceTemplate({ symbol, price }) {
-//   const img = symbol.replace('USDT', '').toLowerCase();
-
-//   return `<img
-//   class="coin-logo"
-//   src="https://assets.coincap.io/assets/icons/${img}@2x.png"
-// />
-// <p class="coin-title">${symbol}</p>
-// <p class="coin-price">${(+price).toFixed(2)}</p>`;
-// }
+function imgTemplate({
+  webformatURL,
+  largeImageURL,
+  tags,
+  likes,
+  views,
+  comments,
+  downloads,
+}) {
+  return `<li>
+    <a href="${largeImageURL}" class="gallery-item">
+      <img src="${webformatURL}" alt="${tags}" />
+    </a>
+    <span>likes ${likes}</span>
+    <span>views ${views}</span>
+    <span>comments ${comments}</span>
+    <span>downloads ${downloads}</span>
+    </li>`;
+}
+function imgsTemplate(arr) {
+  if (!Array.isArray(arr)) {
+    console.error('Expected an array but got:', arr);
+    return '';
+  }
+  return arr.map(imgTemplate).join('');
+}
