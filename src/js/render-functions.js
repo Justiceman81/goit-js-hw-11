@@ -1,41 +1,35 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { searchImg } from './pixabay-api.js';
+import { refs } from '../main.js';
 
-const listEl = document.querySelector('.img-list');
 let lightbox;
+const listEl = document.querySelector('.img-list');
+export function createElements(values) {
+  const gallery = refs.imgGallery;
+  const markup = values.hits
+    .map(value => {
+      return `<li class="list-el">
+                <a class="gallery-img" href="${value.largeImageURL}"><img src='${value.webformatURL}' alt='${value.tags}'></a>
+                <div class="content">
+                    <div class="item"><h3>Likes</h3><p>${value.likes}</p></div>
+                    <div class="item"><h3>Views</h3><p>${value.views}</p></div>
+                    <div class="item"><h3>Comments</h3><p>${value.comments}</p></div>
+                    <div class="item"><h3>Downloads</h3><p>${value.downloads}</p></div>
+                </div>
+            </li>`;
+    })
+    .join('');
+  gallery.innerHTML = markup;
 
-export function createElements() {
-  searchImg().then(data => {
-    const markup = imgsTemplate(data);
-    listEl.insertAdjacentHTML('afterbegin', markup);
-    lightbox.refresh();
-  });
+  lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+  }).refresh();
 }
-
-function imgTemplate({
-  webformatURL,
-  largeImageURL,
-  tags,
-  likes,
-  views,
-  comments,
-  downloads,
-}) {
-  return `<li>
-    <a href="${largeImageURL}" class="gallery-item">
-      <img src="${webformatURL}" alt="${tags}" />
-    </a>
-    <span>likes ${likes}</span>
-    <span>views ${views}</span>
-    <span>comments ${comments}</span>
-    <span>downloads ${downloads}</span>
-    </li>`;
+export function showLoader() {
+  refs.loader.classList.remove('hidden');
 }
-function imgsTemplate(arr) {
-  if (!Array.isArray(arr)) {
-    console.error('Expected an array but got:', arr);
-    return '';
-  }
-  return arr.map(imgTemplate).join('');
+export function hideLoader() {
+  refs.loader.classList.add('hidden');
 }

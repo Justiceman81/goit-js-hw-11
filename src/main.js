@@ -4,18 +4,28 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { searchImg } from './js/pixabay-api.js';
-import { createElements } from './js/render-functions.js';
+import {
+  createElements,
+  showLoader,
+  hideLoader,
+} from './js/render-functions.js';
 
-const inputEl = document.querySelector('.input-search');
-const btnEl = document.querySelector('.btn-search');
-const formEl = document.querySelector('.form-el');
-const loader = document.getElementById('loader');
-formEl.addEventListener('submit', e => {
+export const refs = {
+  formEl: document.querySelector('.form-el'),
+  inputEl: document.querySelector('.input-search'),
+  imgGallery: document.querySelector('.gallery'),
+  loader: document.querySelector('.loader'),
+};
+
+refs.formEl.addEventListener('submit', e => {
   e.preventDefault();
-  if (inputEl.value.trim() === '') {
+  const value = refs.formEl.elements[0].value.trim();
+  if (!value) {
+    iziToast.error({
+      message: 'Info Search input must be filled!',
+    });
     return;
   } else {
-    searchImg(inputEl.value.trim());
-    createElements();
+    searchImg(value);
   }
 });

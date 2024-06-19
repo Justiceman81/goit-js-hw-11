@@ -1,5 +1,6 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import { createElements } from './render-functions.js';
 
 export function searchImg(img) {
   const BASE_URL = 'https://pixabay.com';
@@ -12,21 +13,27 @@ export function searchImg(img) {
     safesearch: true,
   });
   const url = `${BASE_URL}${END_POINT}?${options}`;
-  return fetch(url)
+  fetch(url)
     .then(data => {
-      return data.json();
+      if (!data.ok) {
+        throw new Error(data.status);
+      } else {
+        return data.json();
+      }
     })
-    .then(data => {
-      console.log(data);
-      if (data === 0) {
-        iziToast.show({
-          message:
-            'Sorry, there are no images matching your search query. Please, try again!',
-          messageColor: '#fafafb',
-        });
+    .then(value => {
+      if (value.length === 0) {
+        throw new Error('Error! Nothing to load');
+      } else {
+        createElements(value);
       }
     })
     .catch(error => {
-      console.log(error);
+      iziToast.error({
+        title: 'Sorry,',
+        message:
+          'there are no images matching your search query. Please try again!',
+        color: 'red',
+      });
     });
 }
