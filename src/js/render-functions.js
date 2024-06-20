@@ -10,7 +10,7 @@ export function createElements(values) {
   const markup = values.hits
     .map(value => {
       return `<li class="list-el">
-                <a class="gallery-img" href="${value.largeImageURL}"><img src='${value.webformatURL}' alt='${value.tags}'></a>
+                <a href="${value.largeImageURL}"><img src='${value.webformatURL}' alt='${value.tags}'></a>
                 <div class="content">
                     <div class="item"><h3>Likes</h3><p>${value.likes}</p></div>
                     <div class="item"><h3>Views</h3><p>${value.views}</p></div>
@@ -22,10 +22,14 @@ export function createElements(values) {
     .join('');
   gallery.innerHTML = markup;
 
-  lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-  }).refresh();
+  if (!lightbox) {
+    lightbox = new SimpleLightbox('.gallery a', {
+      captionsData: 'alt',
+      captionDelay: 250,
+    });
+  } else {
+    lightbox.refresh();
+  }
 }
 export function showLoader() {
   refs.loader.classList.remove('hidden');

@@ -26,6 +26,37 @@ refs.formEl.addEventListener('submit', e => {
     });
     return;
   } else {
-    searchImg(value);
+    searchImg(value)
+      .then(data => {
+        if (data.length === 0) {
+          throw new Error('Error! Nothing to load');
+        } else {
+          createElements(data);
+        }
+      })
+      .catch(error => {
+        iziToast.error({
+          title: 'Sorry,',
+          message:
+            'there are no images matching your search query. Please try again!',
+          color: 'red',
+        });
+      });
   }
+  showLoader();
+  const arr = searchImg(value);
+  if (arr.length !== 0) {
+    arr.then(data => createElements(data.hits));
+  }
+  arr.catch(err => {
+    iziToast.show({
+      message:
+        'Sorry, there are no images matching your search query. Please try again!',
+      position: 'center',
+    });
+  });
+  arr.finally(() => {
+    hideLoader();
+    refs.formEl.reset();
+  });
 });

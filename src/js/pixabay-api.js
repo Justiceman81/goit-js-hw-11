@@ -13,27 +13,11 @@ export function searchImg(img) {
     safesearch: true,
   });
   const url = `${BASE_URL}${END_POINT}?${options}`;
-  fetch(url)
-    .then(data => {
-      if (!data.ok) {
-        throw new Error(data.status);
-      } else {
-        return data.json();
-      }
-    })
-    .then(value => {
-      if (value.length === 0) {
-        throw new Error('Error! Nothing to load');
-      } else {
-        createElements(value);
-      }
-    })
-    .catch(error => {
-      iziToast.error({
-        title: 'Sorry,',
-        message:
-          'there are no images matching your search query. Please try again!',
-        color: 'red',
-      });
-    });
+  return fetch(url).then(data => {
+    if (!data.ok) {
+      throw new Error(data.status);
+    } else {
+      return data.json();
+    }
+  });
 }
