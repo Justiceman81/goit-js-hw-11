@@ -3,7 +3,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import { searchImg } from './pixabay-api.js';
 import { refs } from '../main.js';
 
-let lightbox;
+const lightbox = new SimpleLightbox('.gallery a');
 const listEl = document.querySelector('.img-list');
 export function createElements(values) {
   const gallery = refs.imgGallery;
@@ -21,15 +21,7 @@ export function createElements(values) {
     })
     .join('');
   gallery.innerHTML = markup;
-
-  if (!lightbox) {
-    lightbox = new SimpleLightbox('.gallery a', {
-      captionsData: 'alt',
-      captionDelay: 250,
-    });
-  } else {
-    lightbox.refresh();
-  }
+  lightbox.refresh();
 }
 export function showLoader() {
   refs.loader.classList.remove('hidden');

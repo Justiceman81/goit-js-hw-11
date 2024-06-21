@@ -1,7 +1,5 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { searchImg } from './js/pixabay-api.js';
 import {
@@ -19,7 +17,7 @@ export const refs = {
 
 refs.formEl.addEventListener('submit', e => {
   e.preventDefault();
-  const value = refs.formEl.elements[0].value.trim();
+  const value = e.currentTarget.search.value.trim();
   if (!value) {
     iziToast.error({
       message: 'Info Search input must be filled!',

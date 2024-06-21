@@ -70,8 +70,10 @@
 .img-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   list-style: none;
   padding: 0;
+  position: relative;
 }
 .img-list li {
   margin: 10px;
@@ -102,44 +104,26 @@
   line-height: 12px;
 }
 .loader {
-  width: 8px;
-  height: 40px;
-  border-radius: 4px;
-  display: block;
-  margin: 20px auto;
-  position: relative;
-  background: currentColor;
-  color: aquamarine;
-  box-sizing: border-box;
-  animation: animloader 0.3s 0.3s linear infinite alternate;
-}
-
-.loader::after,
-.loader::before {
-  content: '';
-  width: 8px;
-  height: 40px;
-  border-radius: 4px;
-  background: currentColor;
-  position: absolute;
+  width: 48px;
+  height: 48px;
   top: 50%;
-  transform: translateY(-50%);
-  left: 20px;
+  left: 50%;
+  border: 5px solid;
+  border-color: #ff3d00 transparent;
+  border-radius: 50%;
+  display: inline-block;
   box-sizing: border-box;
-  animation: animloader 0.3s 0.45s linear infinite alternate;
+  animation: rotation 5s linear infinite;
+  position: absolute;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 .hidden {
   display: none;
-}
-.loader::before {
-  left: -20px;
-  animation-delay: 0s;
-}
-@keyframes animloader {
-  0% {
-    height: 48px;
-  }
-  100% {
-    height: 4px;
-  }
 }
