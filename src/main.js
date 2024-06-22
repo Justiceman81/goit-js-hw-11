@@ -17,15 +17,16 @@ export const refs = {
 
 refs.formEl.addEventListener('submit', e => {
   e.preventDefault();
+  gallery.innerHTML = '';
+  showLoader();
   const value = e.currentTarget.search.value.trim();
   if (!value) {
     iziToast.error({
       message: 'Info Search input must be filled!',
+      position: 'topRight',
     });
     return;
   }
-
-  showLoader();
 
   searchImg(value)
     .then(data => {
@@ -41,6 +42,7 @@ refs.formEl.addEventListener('submit', e => {
         message:
           'there are no images matching your search query. Please try again!',
         color: 'red',
+        position: 'topRight',
       });
     })
     .finally(() => {
