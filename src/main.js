@@ -17,7 +17,7 @@ export const refs = {
 
 refs.formEl.addEventListener('submit', e => {
   e.preventDefault();
-  gallery.innerHTML = '';
+  refs.imgGallery.innerHTML = '';
   showLoader();
   const value = e.currentTarget.search.value.trim();
   if (!value) {
@@ -30,8 +30,12 @@ refs.formEl.addEventListener('submit', e => {
 
   searchImg(value)
     .then(data => {
-      if (data.length === 0) {
-        throw new Error('Error! Nothing to load');
+      if (data.hits.length === 0) {
+        iziToast.error({
+          position: 'topRight',
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+        });
       } else {
         createElements(data);
       }
